@@ -1,0 +1,80 @@
+db.Unscoped().Where("1 = 1").Delete(&User{})
+db.Exec("ALTER TABLE users AUTO_INCREMENT = 1")
+
+// Database connection string
+	dsn := "root:rootpassword@tcp(127.0.0.1:3306)/testdb?charset=utf8mb4&parseTime=True&loc=Local"
+
+	// Connect to the database
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+
+
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
+
+// User represents the User model
+type User struct {
+	ID   uint `gorm:"primaryKey"`
+	Name string
+}
+
+func main() {
+	// Database connection string
+	dsn := "root:rootpassword@tcp(127.0.0.1:3306)/testdb?charset=utf8mb4&parseTime=True&loc=Local"
+
+	// Connect to the database
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+
+	// Auto migrate the User model to create the users table
+	db.AutoMigrate(&User{})
+
+	// Create
+	var user *User
+
+	f := User{Name: "kl"}
+
+	db.Create(&f)
+	fmt.Println(f.ID)
+
+	f1 := User{Name: "l"}
+	db.Create(&f1)
+	fmt.Println(f1.ID)
+
+	db.Find(&user, "Name = ?", "l")
+	fmt.Println(*user)
+
+	db.Model(&user).Where("Name = ?", "l").Update("name", "mahi")
+	var userNotFound *User
+	r := db.Find(&userNotFound, "Name = ?", "l")
+	fmt.Println(*userNotFound)
+	fmt.Println(r.RowsAffected)
+
+	db.Find(&user, "Name = ?", "mahi")
+	fmt.Println(*user)
+
+	db.Delete(&user, "Name = ?", "mahi")
+
+	var users []User
+	db.Find(&users)
+	fmt.Println("All users:")
+	for _, u := range users {
+		fmt.Printf("%+v\n", u)
+	}
+
+	db.Unscoped().Where("1 = 1").Delete(&User{})
+	db.Exec("ALTER TABLE users AUTO_INCREMENT = 1")
+
+}
+
