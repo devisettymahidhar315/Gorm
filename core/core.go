@@ -1,6 +1,6 @@
 package core
 
 type User struct {
-	Id   int
+	Id   int `gorm:"primaryKey"`
 	Name string
 }
