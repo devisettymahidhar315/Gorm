@@ -14,14 +14,17 @@
   go run main.go
 ```
 ## End Points for this Project
+## CREATE
 ### if you are using the postman
 ### For Create, select the post method.
 #### For Create a data ```http:localhost:8080/id/value```
 
+## DELETE
 ### For delete, select the delete method
 #### For delete a key ```http://localhost:8080/:id ```
 #### For delete entire database ```http://localhost:8080/all```
 
+## PRINTING
 ### For printing , select the get method
 #### For Printing a key ```http:localhost:8080/:id```
 #### For Printing all ```http:localhost:8080/print```
